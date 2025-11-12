@@ -4,14 +4,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import Icon from '@/components/ui/icon';
 import Captcha from '@/components/Captcha';
+import AuthDialog from '@/components/AuthDialog';
 
 const Index = () => {
   const [selectedRank, setSelectedRank] = useState<string | null>(null);
   const [showCaptcha, setShowCaptcha] = useState(false);
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const [pendingRank, setPendingRank] = useState<string | null>(null);
+  const [showAuth, setShowAuth] = useState(false);
+  const [user, setUser] = useState<{ email: string; name: string } | null>(null);
 
   const ranks = [
     {
@@ -81,6 +85,14 @@ const Index = () => {
     }
   };
 
+  const handleAuth = (userData: { email: string; name: string }) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+  };
+
   return (
     <div className="min-h-screen">
       <header className="border-b-4 border-primary bg-card shadow-lg sticky top-0 z-50">
@@ -97,10 +109,35 @@ const Index = () => {
               <a href="#news" className="text-foreground hover:text-primary transition-colors font-medium">Новости</a>
               <a href="#rules" className="text-foreground hover:text-primary transition-colors font-medium">Правила</a>
             </nav>
-            <Button className="gap-2">
-              <Icon name="Play" size={16} />
-              Играть
-            </Button>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="gap-2">
+                    <Icon name="User" size={16} />
+                    {user.name}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem className="gap-2">
+                    <Icon name="ShoppingBag" size={14} />
+                    Мои покупки
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="gap-2">
+                    <Icon name="Settings" size={14} />
+                    Настройки
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="gap-2 text-red-500" onClick={handleLogout}>
+                    <Icon name="LogOut" size={14} />
+                    Выйти
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button className="gap-2" onClick={() => setShowAuth(true)}>
+                <Icon name="User" size={16} />
+                Войти
+              </Button>
+            )}
           </div>
         </div>
       </header>
@@ -290,6 +327,12 @@ const Index = () => {
               Перенаправляем на оплату...
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showAuth} onOpenChange={setShowAuth}>
+        <DialogContent className="sm:max-w-md">
+          <AuthDialog onClose={() => setShowAuth(false)} onAuth={handleAuth} />
         </DialogContent>
       </Dialog>
     </div>
