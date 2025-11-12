@@ -3,10 +3,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Icon from '@/components/ui/icon';
+import Captcha from '@/components/Captcha';
 
 const Index = () => {
   const [selectedRank, setSelectedRank] = useState<string | null>(null);
+  const [showCaptcha, setShowCaptcha] = useState(false);
+  const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [pendingRank, setPendingRank] = useState<string | null>(null);
 
   const ranks = [
     {
@@ -58,6 +63,23 @@ const Index = () => {
     { title: 'Гриферство', content: 'Запрещено разрушение чужих построек, кража из незащищенных сундуков запрещена. Используйте /region для защиты. Наказание: Бан от 3 до 30 дней.' },
     { title: 'Багоюз', content: 'Запрещено использование багов для получения преимуществ. Обнаружили баг? Сообщите администрации. Наказание: Бан от 7 дней до Permanent.' }
   ];
+
+  const handleBuyClick = (rankId: string) => {
+    setPendingRank(rankId);
+    setShowCaptcha(true);
+  };
+
+  const handleCaptchaVerify = (success: boolean) => {
+    if (success) {
+      setCaptchaVerified(true);
+      setSelectedRank(pendingRank);
+      setTimeout(() => {
+        setShowCaptcha(false);
+        setCaptchaVerified(false);
+        setPendingRank(null);
+      }, 1500);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -151,7 +173,7 @@ const Index = () => {
                   </ul>
                   <Button 
                     className="w-full" 
-                    onClick={() => setSelectedRank(rank.id)}
+                    onClick={() => handleBuyClick(rank.id)}
                   >
                     Купить {rank.name}
                   </Button>
@@ -247,6 +269,29 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <Dialog open={showCaptcha} onOpenChange={setShowCaptcha}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {captchaVerified ? (
+                <div className="flex items-center gap-2 text-green-600">
+                  <Icon name="CheckCircle" size={24} />
+                  <span>Проверка пройдена!</span>
+                </div>
+              ) : (
+                'Проверка безопасности'
+              )}
+            </DialogTitle>
+          </DialogHeader>
+          {!captchaVerified && <Captcha onVerify={handleCaptchaVerify} />}
+          {captchaVerified && (
+            <div className="text-center py-4 text-muted-foreground">
+              Перенаправляем на оплату...
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
