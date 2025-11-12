@@ -10,25 +10,39 @@ const Index = () => {
 
   const ranks = [
     {
-      id: 'vip',
-      name: 'VIP',
-      price: '199₽',
+      id: 'titan',
+      name: 'ТИТАН',
+      price: '123₽',
       color: 'bg-primary',
-      features: ['Цветной ник', 'Кит /kit vip раз в день', '+5 регионов', 'Приватные сообщения']
+      features: ['Цветной ник', 'Кит /kit titan раз в день', '+5 регионов', 'Приватные сообщения']
     },
     {
-      id: 'premium',
-      name: 'PREMIUM',
-      price: '399₽',
+      id: 'legend',
+      name: 'ЛЕГЕНДА',
+      price: '246₽',
       color: 'bg-accent',
-      features: ['Светящийся ник', 'Кит /kit premium 2 раза в день', '+15 регионов', 'Телепорт к игрокам', 'Полет в лобби']
+      features: ['Светящийся ник', 'Кит /kit legend 2 раза в день', '+15 регионов', 'Телепорт к игрокам', 'Полет в лобби']
     },
     {
-      id: 'legendary',
-      name: 'LEGENDARY',
-      price: '699₽',
+      id: 'user',
+      name: 'ЮЗЕР',
+      price: '500₽',
       color: 'bg-secondary',
-      features: ['Анимированный ник', 'Кит /kit legend 3 раза в день', '+50 регионов', 'Телепорт куда угодно', 'Полет везде', 'Приоритет в очереди']
+      features: ['Эпичный ник', 'Кит /kit user 3 раза в день', '+25 регионов', 'Быстрый телепорт', 'Полет в мирах']
+    },
+    {
+      id: 'master',
+      name: 'МАСТЕР',
+      price: '1000₽',
+      color: 'bg-primary',
+      features: ['Анимированный ник', 'Кит /kit master 4 раза в день', '+50 регионов', 'Телепорт куда угодно', 'Полет везде', 'Приоритет в очереди']
+    },
+    {
+      id: 'emperor',
+      name: 'ИМПЕРАТОР',
+      price: '1500₽',
+      color: 'bg-accent',
+      features: ['Легендарный ник', 'Кит /kit emperor 5 раз в день', 'Безлимит регионов', 'Мгновенный телепорт', 'Полет без ограничений', 'VIP приоритет', 'Особые команды']
     }
   ];
 
@@ -110,7 +124,7 @@ const Index = () => {
             <h2 className="text-4xl font-bold mb-4 text-primary">Донат привилегии</h2>
             <p className="text-muted-foreground">Поддержи сервер и получи крутые возможности</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {ranks.map((rank) => (
               <Card 
                 key={rank.id} 
